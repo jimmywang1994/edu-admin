@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>
+</title>
+</head>
+<body>
+<div id="app">
+    <table>
+        <tr v-for="teacher in teacherList">
+            <td>{{teacher.name}}</td>
+            <td>{{teacher.age}}</td>
+        </tr>
+    </table>
+</div>
+<script src="vue.min.js"></script>
+<script src="axios.min.js"></script>
+<script>
+    //查询所有讲师的集合
+    new Vue({
+        el:'#app',
+        data:{
+            //定义js使用变量，设置初始值
+            teacherList:[]
+        },
+        created(){
+            //vue生命周期的方法
+            //在数据显示之前执行
+            //一般都是调用方法得到数据
+            this.getTeacherList()
+        },
+        methods:{
+            //定义使用到的一些方法
+            getTeacherList(){
+                //使用axios发送ajax请求
+                axios.get("teacher.json")
+                .then(response=>{
+                    //response
+                    //console.log(response)
+                    this.teacherList=response.data.data.items
+                    console.log(this.teacherList)
+                })
+                .catch(error=>{
+
+                })
+            }
+        }
+    })
+</script>
+</body>
+
+</html>
