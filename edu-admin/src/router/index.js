@@ -71,7 +71,40 @@ export const constantRouterMap = [
       }
     ]
   },
+  {
+    path: '/teacher',
+    component: Layout,
+    redirect: '/teacher/list',
+    name: '讲师管理',
+    meta: { title: '讲师管理', icon: 'example' },
+    children: [
+      {
+        path: 'list',
+        name: '讲师列表',
+        component: () => import('@/views/table/index'),
+        meta: { title: '讲师列表', icon: 'table' }
+      },
+      {
+        path: 'save',
+        name: '添加讲师',
+        component: () => import('@/views/tree/index'),
+        meta: { title: '添加讲师', icon: 'tree' }
+      }
+    ]
+  },
 
+  {
+    path: '/form',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Form',
+        component: () => import('@/views/form/index'),
+        meta: { title: 'Form', icon: 'form' }
+      }
+    ]
+  },
   {
     path: '/nested',
     component: Layout,
