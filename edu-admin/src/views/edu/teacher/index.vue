@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-    import teacher from '@api/teacher'
+    import teacher from '@/api/teacher'
     export default{
         data(){
             //定义变量
