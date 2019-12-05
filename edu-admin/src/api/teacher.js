@@ -9,5 +9,11 @@ export default {
             //传递条件对象，如果传递json数据，使用data
             data:searchObj
         })
+    },
+    deleteTeacherById(id){
+        return request({
+            url:'/eduservice/edu-teacher/'+id,
+            method:'delete'
+        })
     }
 }
