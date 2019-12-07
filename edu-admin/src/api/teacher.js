@@ -15,5 +15,28 @@ export default {
             url:'/eduservice/edu-teacher/'+id,
             method:'delete'
         })
+    },
+    //添加方法
+    saveTeacher(teacher){
+        return request({
+            url:'/eduservice/edu-teacher/addTeacher',
+            method:'post',
+            data:teacher
+        })
+    },
+    //根据id查讲师
+    getTeacherById(id){
+        return request({
+            url:'/eduservice/edu-teacher/getTeacherInfo/'+id,
+            method:'get'
+        })
+    },
+    //根据id修改讲师
+    updateTeacher(id,teacher){
+        return request({
+            url:'/eduservice/edu-teacher/updateTeacher/'+id,
+            method:'post',
+            data:teacher
+        })
     }
 }
