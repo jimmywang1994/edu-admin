@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="app-container">
     <el-input v-model="filterText" placeholder="Filter keyword" style="margin-bottom:30px;" />
     <el-button type="text" @click="dialogFormVisible = true">添加一级分类</el-button>
@@ -15,7 +15,7 @@
         <span>{{ node.label }}</span>
         <span>
           <!-- 使用Chrome的Vue插件调试 -->
-          <el-button v-if="node.level == 1" type="text" size="mini" @click="() => append(data)">添加二级分类</el-button>
+          <el-button v-if="node.level == 1" type="text" size="mini" @click="() =>  {dialogFormVisible = true; subject.parentId = data.id}">添加二级分类</el-button>
           <el-button
             v-if="node.level == 2||node.level==1"
             type="text"
@@ -33,7 +33,7 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="appendLevelOne()">确 定</el-button>
+        <el-button type="primary" @click="appendSubject()">确 定</el-button>
     </div>
     </el-dialog>
   </div>
@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     //添加分类
-    append() {
+    appendSubject() {
       //判断添加的是一级还是二级分类
       //根据subject里面parentId判断
       if (!this.subject.parentId) {
@@ -80,7 +80,7 @@ export default {
         this.appendTwoLevel();
       }
     },
-    //添加一级分类
+    //添加二级分类
     appendTwoLevel() {
       subject
         .addSubjectTwo(this.subject)
@@ -176,7 +176,6 @@ export default {
     },
     getAllSubject() {
       subject.getAllSubjectList().then(response => {
-        console.log(response.data);
         this.subjectList = response.data.items;
       });
     },
