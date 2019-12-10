@@ -74,7 +74,7 @@ export const constantRouterMap = [
       {
         path: 'list',
         name: '分类列表',
-        component: () => import('@/views/edu/teacher/index'),
+        component: () => import('@/views/edu/subject/index'),
         meta: { title: '分类列表', icon: 'table' }
       },
       {
