@@ -13,5 +13,11 @@ export default {
             url: '/eduservice/edu-teacher',
             method: 'get'
         })
+    },
+    getCourseInfoById(id){
+        return request({
+            url: '/eduservice/edu-course/'+id,
+            method: 'get'
+        })
     }
 }
