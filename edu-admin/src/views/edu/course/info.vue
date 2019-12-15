@@ -250,7 +250,20 @@ export default {
         });
     },
     updateCourse() {
-      this.$router.push({ path: "/edu/course/info/1" });
+      course.updateCourseInfoById(this.courseInfo)
+     .then(response => {
+            return this.$message({
+            type: "success",
+            message: "修改课程信息成功!"
+          });
+          this.$route.push({path:'/subject/list'})
+      })
+      .catch(response => {
+        return this.$message({
+          type: "error",
+          message: "修改课程信息失败!"
+        });
+      });
     }
   }
 };
