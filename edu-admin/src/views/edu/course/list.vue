@@ -93,13 +93,18 @@
 
       <el-table-column label="操作" width="150" align="center">
         <template slot-scope="scope">
-          <router-link :to="'/edu/course/info/'+scope.row.id">
+          <router-link :to="'/eduservice/edu-course/'+scope.row.id">
             <el-button type="text" size="mini" icon="el-icon-edit">编辑课程信息</el-button>
           </router-link>
-          <router-link :to="'/edu/course/chapter/'+scope.row.id">
+          <router-link :to="'/eduservice/edu-course/chapter/'+scope.row.id">
             <el-button type="text" size="mini" icon="el-icon-edit">编辑课程大纲</el-button>
           </router-link>
-          <el-button type="text" size="mini" icon="el-icon-delete">删除</el-button>
+          <el-button
+            type="text"
+            size="mini"
+            icon="el-icon-delete"
+            @click="removeDataById(scope.row.id)"
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -133,19 +138,20 @@ export default {
     };
   },
   created() {
-    this.getAllCourse()
-    this.initTeacherList()
-    this.initSubjectList()
+    this.getAllCourse();
+    this.initTeacherList();
+    this.initSubjectList();
   },
   methods: {
     getAllCourse(page = 1) {
-    this.page = page
-    this.listLoading=true
-      course.getCourseList(this.page,this.limit,this.searchObj)
+      this.page = page;
+      this.listLoading = true;
+      course
+        .getCourseList(this.page, this.limit, this.searchObj)
         .then(response => {
-           this.list=response.data.items
-           this.total=response.data.total         
-           this.listLoading=false
+          this.list = response.data.items;
+          this.total = response.data.total;
+          this.listLoading = false;
         })
         .catch(response => {});
     },
@@ -157,25 +163,59 @@ export default {
         })
         .catch(response => {});
     },
-    initSubjectList(){
-      subject.getAllSubjectList()
-      .then(response=>{
-          this.oneLevelList=response.data.items;
-      })
-      .catch(response=>{})
+    initSubjectList() {
+      subject
+        .getAllSubjectList()
+        .then(response => {
+          this.oneLevelList = response.data.items;
+        })
+        .catch(response => {});
     },
     subjectLevelOneChanged(value) {
-        for (var i = 0; i < this.oneLevelList.length; i++) {
+      for (var i = 0; i < this.oneLevelList.length; i++) {
         var levelOne = this.oneLevelList[i];
         if (levelOne.id === value) {
           this.twoLevelList = levelOne.children;
         }
       }
     },
+    removeDataById(id) {
+      //调用方法删除
+      this.$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          //return表示后面的then还会执行
+          return course.deleteCourseById(id);
+        })
+        .then(() => {
+          //刷新整个页面
+          this.getAllCourse();
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(response => {
+          if (response === "cancel") {
+            this.$message({
+              type: "info",
+              message: "已取消删除"
+            });
+          } else {
+            this.$message({
+              type: "error",
+              message: "删除失败"
+            });
+          }
+        });
+    },
     resetData() {
-      this.searchObj = {}
-      this.twoLevelList = [] // 二级分类列表
-      this.getAllCourse()
+      this.searchObj = {};
+      this.twoLevelList = []; // 二级分类列表
+      this.getAllCourse();
     }
   }
 };
@@ -183,42 +223,42 @@ export default {
 
 <style scoped>
 .myClassList .info {
-    width: 450px;
-    overflow: hidden;
+  width: 450px;
+  overflow: hidden;
 }
 .myClassList .info .pic {
-    width: 150px;
-    height: 90px;
-    overflow: hidden;
-    float: left;
+  width: 150px;
+  height: 90px;
+  overflow: hidden;
+  float: left;
 }
 .myClassList .info .pic a {
-    display: block;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 .myClassList .info .pic img {
-    display: block;
-    width: 100%;
+  display: block;
+  width: 100%;
 }
 .myClassList td .info .title {
-    width: 280px;
-    float: right;
-    height: 90px;
+  width: 280px;
+  float: right;
+  height: 90px;
 }
 .myClassList td .info .title a {
-    display: block;
-    height: 48px;
-    line-height: 24px;
-    overflow: hidden;
-    color: #00baf2;
-    margin-bottom: 12px;
+  display: block;
+  height: 48px;
+  line-height: 24px;
+  overflow: hidden;
+  color: #00baf2;
+  margin-bottom: 12px;
 }
 .myClassList td .info .title p {
-    line-height: 20px;
-    margin-top: 5px;
-    color: #818181;
+  line-height: 20px;
+  margin-top: 5px;
+  color: #818181;
 }
 </style>

@@ -33,5 +33,11 @@ export default {
             method: 'post',
             data:searchObj
         })
+    },
+    deleteCourseById(id){
+        return request({
+            url: '/eduservice/edu-course/deleteCourse/'+id,
+            method: 'delete'
+        })
     }
 }
