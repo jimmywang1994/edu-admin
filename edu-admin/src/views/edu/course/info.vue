@@ -170,25 +170,24 @@ export default {
       course
         .getCourseInfoById(id)
         .then(response => {
-           this.courseInfo = response.data.courseInfoForm
-                    //1 查询所有的一级分类
-                    subject.getAllSubjectList()
-                        .then(response => {
-                            this.oneLevelList = response.data.items
-                            //2 遍历一级分类集合
-                            for(var i=0;i<this.oneLevelList.length;i++) {
-                                //3 获取每个一级分类
-                                var levelOne = this.oneLevelList[i]
-                                //4 判断：每个一级分类id和课程所属一级分类id是否相同
-                                if(levelOne.id === this.courseInfo.subjectParentId) {
-                                    //5 获取这个一级分类里面的所有的二级分类
-                                    this.twoLevelList = levelOne.children
-                                }
-                            }
-                    })
-                    //调用获取所有的讲师的方法
-                    this.getTeacherList()
-                })
+          this.courseInfo = response.data.courseInfoForm;
+          //1 查询所有的一级分类
+          subject.getAllSubjectList().then(response => {
+            this.oneLevelList = response.data.items;
+            //2 遍历一级分类集合
+            for (var i = 0; i < this.oneLevelList.length; i++) {
+              //3 获取每个一级分类
+              var levelOne = this.oneLevelList[i];
+              //4 判断：每个一级分类id和课程所属一级分类id是否相同
+              if (levelOne.id === this.courseInfo.subjectParentId) {
+                //5 获取这个一级分类里面的所有的二级分类
+                this.twoLevelList = levelOne.children;
+              }
+            }
+          });
+          //调用获取所有的讲师的方法
+          this.getTeacherList();
+        })
         .catch(response => {});
     },
     getTeacherList() {
@@ -250,20 +249,26 @@ export default {
         });
     },
     updateCourse() {
-      course.updateCourseInfoById(this.courseInfo)
-     .then(response => {
-            return this.$message({
+      course
+        .updateCourseInfoById(this.courseInfo)
+        .then(response => {
+          return this.$message({
             type: "success",
             message: "修改课程信息成功!"
           });
-          this.$route.push({path:'/subject/list'})
-      })
-      .catch(response => {
-        return this.$message({
-          type: "error",
-          message: "修改课程信息失败!"
+          return response;
+        })
+        .then(response => {
+          this.$router.push({
+            path: "/course/chapter/" + this.courseInfo.id
+          });
+        })
+        .catch(response => {
+          return this.$message({
+            type: "error",
+            message: "修改课程信息失败!"
+          });
         });
-      });
     }
   }
 };

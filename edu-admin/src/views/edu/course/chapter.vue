@@ -56,7 +56,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="dialogVidoFormVisible" title="添加小节">
+    <el-dialog :visible.sync="dialogVideoFormVisible" title="添加小节">
       <el-form :model="video" label-width="120px">
         <el-form-item label="小节标题">
           <el-input v-model="video.title" />
@@ -65,8 +65,7 @@
           <el-input-number v-model="video.sort" :min="0" controls-position="right" />
         </el-form-item>
 
-        <!--上传按钮实现视频上传-->
-        <el-form-item label="上传视频">
+        <!-- <el-form-item label="上传视频">
           <el-upload
             :on-success="handleVodUploadSuccess"
             :on-remove="handleVodRemove"
@@ -89,7 +88,7 @@
               <i class="el-icon-question" />
             </el-tooltip>
           </el-upload>
-        </el-form-item>
+        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogVidoFormVisible = false">取 消</el-button>
@@ -101,9 +100,11 @@
 
 <script>
 import chapter from "@/api/chapter";
+import video from "@/api/video";
 export default {
   data() {
     return {
+      BASE_API: process.env.BASE_API,
       saveBtnDisabled: false, // 保存按钮是否禁用
       id: "",
       chapterVideoList: [],
@@ -116,6 +117,7 @@ export default {
         videoSourceId: "",
         videoOriginalName: "" //视频名称
       },
+      dialogVideoFormVisible: false,
       dialogChapterFormVisible: false, //是否显示章节表单
       chapter: {
         // 章节对象
@@ -140,6 +142,98 @@ export default {
       this.chapter.title = "";
       this.chapter.sort = "";
       this.chapter.courseId = "";
+    },
+    openVideoDialog(chapterId) {
+      this.video.title = "";
+      this.video.sort = "";
+      this.video.id="";
+      this.dialogVideoFormVisible = true;
+      this.video.chapterId = chapterId;
+      this.video.courseId = this.id;
+    },
+    openVideoEditDialog(videoId) {
+      this.dialogVideoFormVisible = true;
+      video.getVideoInfo(videoId).then(response => {
+        this.video = response.data.eduVideo;
+      });
+    },
+    saveOrUpdateVideo() {
+      if (!this.video.id) {
+        this.addVideo();
+      } else {
+        this.updateVideo(this.video);
+      }
+    },
+    addVideo() {
+      video
+        .addVideo(this.video)
+        .then(response => {
+          this.dialogVideoFormVisible = false;
+          this.$message({
+            type: "success",
+            message: "添加小节成功!"
+          });
+          //刷新页面
+          this.getChapterVideoById(this.id);
+        })
+        .catch(response => {
+          this.$message({
+            type: "error",
+            message: "添加小节失败!"
+          });
+        });
+    },
+    updateVideo() {
+      video
+        .updateVideo(this.video)
+        .then(response => {
+          this.dialogVideoFormVisible = false;
+          this.$message({
+            type: "success",
+            message: "修改小节成功!"
+          });
+          //刷新页面
+          this.getChapterVideoById(this.id);
+        })
+        .catch(response => {
+          this.$message({
+            type: "error",
+            message: "修改小节失败!"
+          });
+        });
+    },
+    removeVideo(videoId) {
+      //调用方法删除
+      this.$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          //return表示后面的then还会执行
+          return video.deleteVideo(videoId);
+        })
+        .then(() => {
+          //刷新整个页面
+          this.getChapterVideoById(this.id);
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(response => {
+          if (response === "cancel") {
+            this.$message({
+              type: "info",
+              message: "已取消删除"
+            });
+          } else {
+            this.$message({
+              type: "error",
+              message: "删除失败"
+            });
+          }
+        });
     },
     init() {
       //获取路由中参数
@@ -195,6 +289,39 @@ export default {
           });
         });
     },
+    removeChapter(id) {
+      //调用方法删除
+      this.$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          //return表示后面的then还会执行
+          return chapter.deleteChapter(id);
+        })
+        .then(() => {
+          //刷新整个页面
+          this.getChapterVideoById(this.id);
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(response => {
+          if (response === "cancel") {
+            this.$message({
+              type: "info",
+              message: "已取消删除"
+            });
+          } else {
+            this.$message({
+              type: "error",
+              message: "删除失败"
+            });
+          }
+        });
+    },
     getChapterById(id) {
       this.dialogChapterFormVisible = true;
       chapter
@@ -204,6 +331,7 @@ export default {
         })
         .catch(response => {});
     },
+    //获取嵌套列表
     getChapterVideoById(id) {
       chapter
         .getAllChapterVideoList(id)
