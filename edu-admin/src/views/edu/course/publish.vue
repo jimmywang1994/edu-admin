@@ -65,8 +65,17 @@ export default {
         .catch(response => {});
     },
     publish() {
-      console.log("publish");
-      this.$router.push({ path: "/course/list" });
+      course.updateCourseStates(this.id)
+      .then(response=>{
+         this.$message({
+            type: "success",
+            message: "课程发布成功!"
+          });
+          this.$router.push({path:'/course'})
+      })
+      .catch(response=>{
+
+      })
     }
   }
 };
