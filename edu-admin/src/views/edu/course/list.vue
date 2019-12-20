@@ -93,10 +93,10 @@
 
       <el-table-column label="操作" width="150" align="center">
         <template slot-scope="scope">
-          <router-link :to="'/eduservice/edu-course/'+scope.row.id">
+          <router-link :to="{path:'/course/info/'+scope.row.id}">
             <el-button type="text" size="mini" icon="el-icon-edit">编辑课程信息</el-button>
           </router-link>
-          <router-link :to="'/eduservice/edu-course/chapter/'+scope.row.id">
+          <router-link :to="'/course/chapter/'+scope.row.id">
             <el-button type="text" size="mini" icon="el-icon-edit">编辑课程大纲</el-button>
           </router-link>
           <el-button
