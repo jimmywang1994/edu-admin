@@ -65,7 +65,7 @@
           <el-input-number v-model="video.sort" :min="0" controls-position="right" />
         </el-form-item>
 
-        <!-- <el-form-item label="上传视频">
+        <el-form-item label="上传视频">
           <el-upload
             :on-success="handleVodUploadSuccess"
             :on-remove="handleVodRemove"
@@ -88,7 +88,7 @@
               <i class="el-icon-question" />
             </el-tooltip>
           </el-upload>
-        </el-form-item>-->
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogVidoFormVisible = false">取 消</el-button>
@@ -143,6 +143,14 @@ export default {
       this.chapter.sort = "";
       this.chapter.courseId = "";
     },
+    //上传成功后的方法
+    handleVodUploadSuccess(response, file, fileList){
+      this.video.videoSourceId = response.data.videoId
+    },
+    //上传之前限制的方法
+    handleUploadExceed(files, fileList){
+      this.$message.warning('想要重新上传视频，请先删除已上传的视频')
+    },
     openVideoDialog(chapterId) {
       this.video.title = "";
       this.video.sort = "";
@@ -150,6 +158,7 @@ export default {
       this.dialogVideoFormVisible = true;
       this.video.chapterId = chapterId;
       this.video.courseId = this.id;
+      this.fileList=[];
     },
     openVideoEditDialog(videoId) {
       this.dialogVideoFormVisible = true;
