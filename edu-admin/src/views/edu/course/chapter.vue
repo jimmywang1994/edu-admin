@@ -115,7 +115,7 @@ export default {
         chapterId: "",
         courseId: "",
         videoSourceId: "",
-        videoOriginalName: "" //视频名称
+        originalName: "" //视频名称
       },
       dialogVideoFormVisible: false,
       dialogChapterFormVisible: false, //是否显示章节表单
@@ -144,26 +144,41 @@ export default {
       this.chapter.courseId = "";
     },
     //上传成功后的方法
-    handleVodUploadSuccess(response, file, fileList){
-      this.video.videoSourceId = response.data.videoId
+    handleVodUploadSuccess(response, file, fileList) {
+      this.video.videoSourceId = response.data.videoId;
+      this.video.originalName = file.name;
     },
     //上传之前限制的方法
-    handleUploadExceed(files, fileList){
-      this.$message.warning('想要重新上传视频，请先删除已上传的视频')
+    handleUploadExceed(files, fileList) {
+      this.$message.warning("想要重新上传视频，请先删除已上传的视频");
+    },
+    //删除前的弹框
+    beforeVodRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
+    },
+    //删除方法
+    handleVodRemove(file, fileList) {
+      video.removeAliyunVideo(this.video.videoSourceId).then(response => {
+        this.$message({
+          type: "success",
+          message: response.message
+        });
+      });
     },
     openVideoDialog(chapterId) {
       this.video.title = "";
       this.video.sort = "";
-      this.video.id="";
+      this.video.id = "";
       this.dialogVideoFormVisible = true;
       this.video.chapterId = chapterId;
       this.video.courseId = this.id;
-      this.fileList=[];
+      this.fileList = [];
     },
     openVideoEditDialog(videoId) {
       this.dialogVideoFormVisible = true;
       video.getVideoInfo(videoId).then(response => {
         this.video = response.data.eduVideo;
+        this.fileList = [{'name': this.video.originalName}]
       });
     },
     saveOrUpdateVideo() {

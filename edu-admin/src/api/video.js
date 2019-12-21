@@ -20,9 +20,15 @@ export default {
             data: video
         })
     },
-    deleteVideo(videoId){
+    deleteVideo(videoId) {
         return request({
-            url: '/eduservice/edu-video/'+videoId,
+            url: '/eduservice/edu-video/' + videoId,
+            method: 'delete'
+        })
+    },
+    removeAliyunVideo(videoId) {
+        return request({
+            url: '/vidservice/vod/' + videoId,
             method: 'delete'
         })
     }
