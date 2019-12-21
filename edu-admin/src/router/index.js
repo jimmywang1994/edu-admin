@@ -128,14 +128,44 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/form',
+    path: '/statistics',
     component: Layout,
+    redirect: '/statistics/list',
+    name: '统计分析',
+    meta: { title: '统计分析', icon: 'example' },
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        path: 'list',
+        name: '生成数据',
+        component: () => import('@/views/edu/statistics/create'),
+        meta: { title: '生成数据', icon: 'table' }
+      },
+      {
+        path: 'info',
+        name: '图表显示',
+        component: () => import('@/views/edu/course/info'),
+        meta: { title: '图表显示', icon: 'tree' }
+      },
+      {
+        path: 'info/:id',
+        name: 'EduCourseInfoEdit',
+        component: () => import('@/views/edu/course/info'),
+        meta: { title: '编辑课程基本信息', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'chapter/:id',
+        name: 'EduCourseChapterEdit',
+        component: () => import('@/views/edu/course/chapter'),
+        meta: { title: '编辑课程大纲', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'publish/:id',
+        name: 'EduCoursePublishEdit',
+        component: () => import('@/views/edu/course/publish'),
+        meta: { title: '发布课程', noCache: true },
+        hidden: true
       }
     ]
   },
