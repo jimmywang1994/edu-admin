@@ -169,6 +169,7 @@ export default {
       this.video.title = "";
       this.video.sort = "";
       this.video.id = "";
+      this.video.videoSourceId=""
       this.dialogVideoFormVisible = true;
       this.video.chapterId = chapterId;
       this.video.courseId = this.id;
