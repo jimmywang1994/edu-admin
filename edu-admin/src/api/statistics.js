@@ -6,10 +6,4 @@ export default {
             method: 'get'
         })
     },
-    showChart(searchObj) {
-        return request({
-            url: `/statistics/daily/getCountData/${searchObj.type}/${searchObj.begin}/${searchObj.end}`,
-            method: 'get'
-        })
-    }
 }
