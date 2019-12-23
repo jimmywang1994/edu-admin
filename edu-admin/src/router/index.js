@@ -143,7 +143,7 @@ export const constantRouterMap = [
       {
         path: 'info',
         name: '图表显示',
-        component: () => import('@/views/edu/course/info'),
+        component: () => import('@/views/edu/statistics/showDataChart'),
         meta: { title: '图表显示', icon: 'tree' }
       },
       {
