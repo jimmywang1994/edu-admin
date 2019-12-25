@@ -34,7 +34,7 @@
               </span>
             </section>
             <section class="c-attr-mt">
-              <a href="#" title="立即观看" class="comm-btn c-btn-3">立即观看</a>
+              <a href="#playvideos" title="立即观看" class="comm-btn c-btn-3">立即观看</a>
             </section>
           </section>
         </aside>
@@ -85,9 +85,7 @@
                   </h6>
                   <div class="course-txt-body-wrap">
                     <section class="course-txt-body">
-                      <p v-html="courseInfo.description">
-                        {{courseInfo.description}}
-                      </p>
+                      <p v-html="courseInfo.description">{{courseInfo.description}}</p>
                     </section>
                   </div>
                 </div>
@@ -99,24 +97,33 @@
                   <section class="mt20">
                     <div class="lh-menu-wrap">
                       <menu id="lh-menu" class="lh-menu mt10 mr10">
-                        <ul>
+                        <ul id="playvideos">
                           <!-- 文件目录 -->
-                          <li class="lh-menu-stair" v-for="(chapter,index) in chapterVideoList" :key="index">
+                          <li
+                            class="lh-menu-stair"
+                            v-for="(chapter,index) in chapterVideoList"
+                            :key="index"
+                          >
                             <a href="javascript: void(0)" :title="chapter.title" class="current-1">
-                              <em class="lh-menu-i-1 icon18 mr10"></em>{{chapter.title}}
+                              <em class="lh-menu-i-1 icon18 mr10"></em>
+                              {{chapter.title}}
                             </a>
                             <ol class="lh-menu-ol" style="display: block;">
-                              <li class="lh-menu-second ml30" v-for="(video,index) in chapterVideoList" :key="index">
-                                <a href="#" title>
-                                  <span class="fr" v-if="video.free===true">
+                              <li
+                                class="lh-menu-second ml30"
+                                v-for="(video,index) in chapter.children"
+                                :key="index"
+                              >
+                                <a
+                                  :href="'/player/'+video.videoSourceId"
+                                  :title="video.title"
+                                  target="_blank"
+                                >
+                                  <span class="fr" v-if="video.free===0">
                                     <i class="free-icon vam mr10">免费试听</i>
                                   </span>
-                                  <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>{{video.title}}
-                                </a>
-                              </li>
-                              <li class="lh-menu-second ml30">
-                                <a href="#" title class="current-2">
-                                  <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>第二节
+                                  <em class="lh-menu-i-2 icon16 mr5">&nbsp;</em>
+                                  {{video.title}}
                                 </a>
                               </li>
                             </ol>
@@ -142,12 +149,7 @@
                   <li>
                     <div class="u-face">
                       <a href="#">
-                        <img
-                          :src="courseInfo.avatar"
-                          width="50"
-                          height="50"
-                          alt
-                        />
+                        <img :src="courseInfo.avatar" width="50" height="50" alt />
                       </a>
                     </div>
                     <section class="hLh30 txtOf">
